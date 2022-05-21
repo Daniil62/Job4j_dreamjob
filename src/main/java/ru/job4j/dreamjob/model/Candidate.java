@@ -8,7 +8,7 @@ public class Candidate {
     private int id;
     private String name;
     private String description;
-    private String created;
+    private LocalDate created;
 
     public Candidate() {
     }
@@ -17,7 +17,7 @@ public class Candidate {
         this.id = id;
         this.name = name;
         this.description = description;
-        created = LocalDate.now().toString();
+        created = LocalDate.now();
     }
 
     public int getId() {
@@ -40,7 +40,7 @@ public class Candidate {
         this.description = description;
     }
 
-    public String getCreated() {
+    public LocalDate getCreated() {
         return created;
     }
 
