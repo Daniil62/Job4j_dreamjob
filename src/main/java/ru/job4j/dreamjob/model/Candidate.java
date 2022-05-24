@@ -11,6 +11,7 @@ public class Candidate {
     private LocalDate created;
 
     public Candidate() {
+        created = LocalDate.now();
     }
 
     public Candidate(int id, String name, String description) {
@@ -22,6 +23,10 @@ public class Candidate {
 
     public int getId() {
         return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -42,6 +47,10 @@ public class Candidate {
 
     public LocalDate getCreated() {
         return created;
+    }
+
+    public void setCreated(LocalDate created) {
+        this.created = created;
     }
 
     @Override
