@@ -39,6 +39,10 @@ public class Post {
         return id;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public String getName() {
         return name;
     }
@@ -57,6 +61,10 @@ public class Post {
 
     public LocalDate getCreated() {
         return created;
+    }
+
+    public void setCreated(LocalDate created) {
+        this.created = created;
     }
 
     @Override
