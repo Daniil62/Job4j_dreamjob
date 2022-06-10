@@ -48,8 +48,8 @@ public class PostDBStore {
 
     public void add(Post post) {
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps =  cn.prepareStatement("INSERT INTO post(" +
-                             "name, description, created, visible, city_id) VALUES (?, ?, ?, ?, ?)",
+             PreparedStatement ps =  cn.prepareStatement("INSERT INTO post("
+                             + "name, description, created, visible, city_id) VALUES (?, ?, ?, ?, ?)",
                      PreparedStatement.RETURN_GENERATED_KEYS)
         ) {
             ps.setString(1, post.getName());
@@ -70,8 +70,8 @@ public class PostDBStore {
 
     public void update(Post post) {
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps =  cn.prepareStatement("UPDATE post " +
-                             "SET name = ?, description = ?, created = ?, visible = ?, city_id = ? WHERE id = ?",
+             PreparedStatement ps =  cn.prepareStatement("UPDATE post "
+                             + "SET name = ?, description = ?, created = ?, visible = ?, city_id = ? WHERE id = ?",
                      PreparedStatement.RETURN_GENERATED_KEYS)
         ) {
             ps.setString(1, post.getName());
@@ -110,6 +110,37 @@ public class PostDBStore {
             log.log(Level.SEVERE, "error: ", e);
         }
         return null;
+    }
+
+    public boolean deletePost(int id) {
+        boolean result = false;
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps =  cn.prepareStatement("DELETE FROM post WHERE id = ?")
+        ) {
+            ps.setInt(1, id);
+            try {
+                result = ps.executeUpdate() > 0;
+            } finally {
+                ps.close();
+            }
+        } catch (Exception e) {
+            log.log(Level.SEVERE, "error: ", e);
+        }
+        return result;
+    }
+
+    public void deleteAll() {
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps =  cn.prepareStatement("DELETE FROM post")
+        ) {
+            try {
+                ps.execute();
+            } finally {
+                ps.close();
+            }
+        } catch (Exception e) {
+            log.log(Level.SEVERE, "error: ", e);
+        }
     }
 
     private static class Fields {

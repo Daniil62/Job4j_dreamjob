@@ -42,8 +42,8 @@ public class CandidateDBStore {
 
     public void add(Candidate candidate) {
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps =  cn.prepareStatement("INSERT INTO candidate(" +
-                             "name, description, created, photo) VALUES (?, ?, ?, ?)",
+             PreparedStatement ps =  cn.prepareStatement("INSERT INTO candidate("
+                             + "name, description, created, photo) VALUES (?, ?, ?, ?)",
                      PreparedStatement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, candidate.getName());
             ps.setString(2, candidate.getDescription());
@@ -83,8 +83,8 @@ public class CandidateDBStore {
 
     public void update(Candidate candidate) {
         try (Connection cn = pool.getConnection();
-             PreparedStatement ps =  cn.prepareStatement("UPDATE candidate " +
-                             "SET name = ?, description = ?, created = ?, photo = ? WHERE id = ?",
+             PreparedStatement ps =  cn.prepareStatement("UPDATE candidate "
+                             + "SET name = ?, description = ?, created = ?, photo = ? WHERE id = ?",
                      PreparedStatement.RETURN_GENERATED_KEYS)
         ) {
             ps.setString(1, candidate.getName());
@@ -97,6 +97,37 @@ public class CandidateDBStore {
                 if (id.next()) {
                     candidate.setId(id.getInt(1));
                 }
+            }
+        } catch (Exception e) {
+            log.log(Level.SEVERE, "error: ", e);
+        }
+    }
+
+    public boolean deleteCandidate(int id) {
+        boolean result = false;
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps =  cn.prepareStatement("DELETE FROM candidate WHERE id = ?")
+        ) {
+            ps.setInt(1, id);
+            try {
+                result = ps.executeUpdate() > 0;
+            } finally {
+                ps.close();
+            }
+        } catch (Exception e) {
+            log.log(Level.SEVERE, "error: ", e);
+        }
+        return result;
+    }
+
+    public void deleteAll() {
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps =  cn.prepareStatement("DELETE FROM candidate")
+        ) {
+            try {
+                ps.execute();
+            } finally {
+                ps.close();
             }
         } catch (Exception e) {
             log.log(Level.SEVERE, "error: ", e);
