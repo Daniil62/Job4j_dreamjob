@@ -14,3 +14,9 @@ description TEXT,
 created DATE,
 photo bytea
 );
+
+CREATE TABLE IF NOT EXISTS users (
+id SERIAL PRIMARY KEY,
+email VARCHAR UNIQUE,
+password TEXT
+);

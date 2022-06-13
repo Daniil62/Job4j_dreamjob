@@ -1,0 +1,24 @@
+2022-06-13 13:20:28 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Таблица "USERS" не найдена
+Table "USERS" not found; SQL statement:
+DELETE FROM users [42102-200]
+2022-06-13 13:20:28 jdbc[3]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Таблица "USERS" не найдена
+Table "USERS" not found; SQL statement:
+INSERT INTO users(email, password) VALUES (?, ?) [42102-200]
+2022-06-13 13:20:29 jdbc[5]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Таблица "USERS" не найдена
+Table "USERS" not found; SQL statement:
+DELETE FROM users [42102-200]
+2022-06-13 13:20:29 jdbc[5]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Таблица "USERS" не найдена
+Table "USERS" not found; SQL statement:
+INSERT INTO users(email, password) VALUES (?, ?) [42102-200]
+2022-06-13 13:20:29 jdbc[7]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Таблица "USERS" не найдена
+Table "USERS" not found; SQL statement:
+DELETE FROM users [42102-200]
+2022-06-13 13:20:29 jdbc[7]: exception
+org.h2.jdbc.JdbcSQLSyntaxErrorException: Таблица "USERS" не найдена
+Table "USERS" not found; SQL statement:
+INSERT INTO users(email, password) VALUES (?, ?) [42102-200]
