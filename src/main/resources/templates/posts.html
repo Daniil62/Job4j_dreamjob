@@ -32,9 +32,27 @@
                 <a class="nav-item nav-link" th:href="@{/index}">Главная</a>
                 <a class="nav-item nav-link active" href="#">Вакансии<span class="sr-only">(current)</span></a>
                 <a class="nav-item nav-link" th:href="@{/candidates}">Кандидаты</a>
-                <a class="nav-item nav-link" th:href="@{/formAddPost}">Добавить вакансию</a>
-                <a class="nav-item nav-link" th:href="@{/formAddCandidate}">Добавить резюме</a>
+                <a class="nav-item nav-link" th:if="${user.name == 'Гость'}">
+                    <span></span>
+                </a>
+                <a class="nav-item nav-link" th:if="${user.name != 'Гость'}" th:href="@{/formAddPost}">
+                    <span>Добавить вакансию</span>
+                </a>
+                <a class="nav-item nav-link" th:if="${user.name == 'Гость'}">
+                    <span></span>
+                </a>
+                <a class="nav-item nav-link" th:if="${user.name != 'Гость'}" th:href="@{/formAddCandidate}">
+                    <span>Добавить резюме</span>
+                </a>
                 <a class="nav-item nav-link" th:href="@{/formRegistration}">Регистрация</a>
+                <a class="nav-item nav-link" th:if="${user.name == 'Гость'}" th:href="@{/loginPage}">
+                    <span th:text="${user.name}"></span>
+                    <span> | Войти</span>
+                </a>
+                <a class="nav-item nav-link" th:if="${user.name != 'Гость'}" th:href="@{/logout}">
+                    <span th:text="${user.name}"></span>
+                    <span> | Выйти</span>
+                </a>
             </div>
         </div>
     </nav>
@@ -53,7 +71,8 @@
             <tbody>
             <tr th:each="post: ${posts}">
                 <td th:text="${post.id}"></td>
-                <td><a th:href="@{|/formUpdatePost/${post.id}|}"><i class="fa fa-edit"></i></a>
+                <td><a th:if="${user.name != 'Гость'}"
+                       th:href="@{|/formUpdatePost/${post.id}|}"><i class="fa fa-edit"></i></a>
                     <span th:text="${post.name}"></span>
                     <span th:if="${post.visible}"><i class="fa fa-check-square-o"></i></span>
                     <span th:if="${!post.visible}"><i class="fa fa-square-o"></i></span>

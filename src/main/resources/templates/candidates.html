@@ -32,9 +32,27 @@
                 <a class="nav-item nav-link" th:href="@{/index}">Главная</a>
                 <a class="nav-item nav-link" th:href="@{/posts}">Вакансии</a>
                 <a class="nav-item nav-link active" href="#">Кандидаты<span class="sr-only">(current)</span></a>
-                <a class="nav-item nav-link" th:href="@{/formAddPost}">Добавить вакансию</a>
-                <a class="nav-item nav-link" th:href="@{/formAddCandidate}">Добавить резюме</a>
+                <a class="nav-item nav-link" th:if="${user.name == 'Гость'}">
+                    <span></span>
+                </a>
+                <a class="nav-item nav-link" th:if="${user.name != 'Гость'}" th:href="@{/formAddPost}">
+                    <span>Добавить вакансию</span>
+                </a>
+                <a class="nav-item nav-link" th:if="${user.name == 'Гость'}">
+                    <span></span>
+                </a>
+                <a class="nav-item nav-link" th:if="${user.name != 'Гость'}" th:href="@{/formAddCandidate}">
+                    <span>Добавить резюме</span>
+                </a>
                 <a class="nav-item nav-link" th:href="@{/formRegistration}">Регистрация</a>
+                <a class="nav-item nav-link" th:if="${user.name == 'Гость'}" th:href="@{/loginPage}">
+                    <span th:text="${user.name}"></span>
+                    <span> | Войти</span>
+                </a>
+                <a class="nav-item nav-link" th:if="${user.name != 'Гость'}" th:href="@{/logout}">
+                    <span th:text="${user.name}"></span>
+                    <span> | Выйти</span>
+                </a>
             </div>
         </div>
     </nav>
@@ -53,7 +71,8 @@
             <tr th:each="candidate: ${candidates}">
                 <td th:text="${candidate.id}"></td>
                 <td><img th:width="150" th:high="150" th:src="@{|/photoCandidate/${candidate.id}|}">
-                <td><a th:href="@{|/formUpdateCandidate/${candidate.id}|}"><i class="fa fa-edit"></i></a>
+                <td><a th:if="${user.name != 'Гость'}"
+                       th:href="@{|/formUpdateCandidate/${candidate.id}|}"><i class="fa fa-edit"></i></a>
                     <span th:text="${candidate.name}"></span>
                 </td>
                 <td th:text="${candidate.description}"></td>

@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import ru.job4j.dreamjob.model.User;
 import ru.job4j.dreamjob.service.UserService;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.Optional;
 
 @Controller
@@ -22,8 +24,8 @@ public class UserController {
     }
 
     @GetMapping("/formRegistration")
-    public String createUser(Model model) {
-        model.addAttribute("user", new User(0, "email", "password"));
+    public String createUser(Model model, HttpSession session) {
+        addUserAttribute(model, session);
         return "registration";
     }
 
@@ -39,7 +41,8 @@ public class UserController {
     }
 
     @GetMapping("/result")
-    public String registrationResult(Model model) {
+    public String registrationResult(Model model, HttpSession session) {
+        addUserAttribute(model, session);
         model.addAttribute("message", SUCCESS_MESSAGE);
         return "result";
     }
@@ -52,13 +55,26 @@ public class UserController {
     }
 
     @PostMapping("/login")
-    public String login(@ModelAttribute User user) {
+    public String login(@ModelAttribute User user, HttpServletRequest req) {
+        String result = "redirect:/index";
         Optional<User> userDb = service.findUserByEmailAndPwd(
                 user.getEmail(), user.getPassword()
         );
         if (userDb.isEmpty()) {
-            return "redirect:/loginPage?fail=true";
+            result = "redirect:/loginPage?fail=true";
+        } else {
+            HttpSession session = req.getSession();
+            session.setAttribute("user", userDb.get());
         }
-        return "redirect:/index";
+        return result;
+    }
+
+    private void addUserAttribute(Model model, HttpSession session) {
+        User user = (User) session.getAttribute("user");
+        if (user == null) {
+            user = new User();
+            user.setName("Гость");
+        }
+        model.addAttribute("user", user);
     }
 }

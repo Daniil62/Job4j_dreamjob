@@ -10,8 +10,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.job4j.dreamjob.model.Candidate;
+import ru.job4j.dreamjob.model.User;
 import ru.job4j.dreamjob.service.CandidateService;
 
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 @Controller
@@ -24,14 +26,17 @@ public class CandidateController {
     }
 
     @GetMapping("/candidates")
-    public String candidates(Model model) {
+    public String candidates(Model model, HttpSession session) {
         model.addAttribute("candidates", service.findAll());
+        addUserAttribute(model, session);
         return "candidates";
     }
 
     @GetMapping("/formAddCandidate")
-    public String addPost(Model model) {
-        model.addAttribute("candidate", new Candidate(0, "Введите название", "Заполните резюме"));
+    public String addPost(Model model, HttpSession session) {
+        addUserAttribute(model, session);
+        model.addAttribute("candidate",
+                new Candidate(0, "Введите название", "Заполните резюме"));
         return "addCandidate";
     }
 
@@ -44,8 +49,9 @@ public class CandidateController {
     }
 
     @GetMapping("/formUpdateCandidate/{candidateId}")
-    public String formUpdateCandidate(Model model, @PathVariable("candidateId") int id) {
+    public String formUpdateCandidate(Model model, @PathVariable("candidateId") int id, HttpSession session) {
         model.addAttribute("candidate", service.findById(id));
+        addUserAttribute(model, session);
         return "updateCandidate";
     }
 
@@ -65,5 +71,14 @@ public class CandidateController {
                 .contentLength(candidate.getPhoto().length)
                 .contentType(MediaType.parseMediaType("application/octet-stream"))
                 .body(new ByteArrayResource(candidate.getPhoto()));
+    }
+
+    private void addUserAttribute(Model model, HttpSession session) {
+        User user = (User) session.getAttribute("user");
+        if (user == null) {
+            user = new User();
+            user.setName("Гость");
+        }
+        model.addAttribute("user", user);
     }
 }
