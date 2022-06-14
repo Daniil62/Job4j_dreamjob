@@ -96,4 +96,26 @@ public class UserDBStore {
             log.log(Level.SEVERE, "error: ", e);
         }
     }
+
+    public Optional<User> findUserByEmailAndPwd(String email, String password) {
+        Optional<User> result = Optional.empty();
+        try (Connection cn = pool.getConnection();
+             PreparedStatement ps =  cn.prepareStatement(
+                     "SELECT * FROM users WHERE email = ? AND password = ?")
+        ) {
+            ps.setString(1, email);
+            ps.setString(2, password);
+            try (ResultSet it = ps.executeQuery()) {
+                if (it.next()) {
+                    result = Optional.of(new User(
+                            it.getInt("id"),
+                            it.getString("email"),
+                            it.getString("password")));
+                }
+            }
+        } catch (Exception e) {
+            log.log(Level.SEVERE, "error: ", e);
+        }
+        return result;
+    }
 }

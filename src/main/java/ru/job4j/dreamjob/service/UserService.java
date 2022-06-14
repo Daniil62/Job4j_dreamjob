@@ -26,4 +26,8 @@ public class UserService {
     public boolean deleteUser(String email, String password) {
         return store.deleteUser(email, password);
     }
+
+    public Optional<User> findUserByEmailAndPwd(String email, String password) {
+        return store.findUserByEmailAndPwd(email, password);
+    }
 }

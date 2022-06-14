@@ -51,4 +51,26 @@ public class UserDBStoreTest {
         assertThat(store.add(otherUser), is(Optional.of(otherUser)));
         assertThat(store.findByEmail(email), is(otherUser));
     }
+
+    @Test
+    public void whenUserAuthorized() {
+        UserDBStore store = new UserDBStore(new Main().loadPool());
+        store.deleteAll();
+        String email = "user@mail.dude";
+        String password = "123456";
+        User user = new User(1, email, password);
+        store.add(user);
+        assertThat(store.findUserByEmailAndPwd(email, password), is(Optional.of(user)));
+    }
+
+    @Test
+    public void whenUserForgotThePassword() {
+        UserDBStore store = new UserDBStore(new Main().loadPool());
+        store.deleteAll();
+        String email = "user@mail.dude";
+        String password = "123456";
+        User user = new User(1, email, password);
+        store.add(user);
+        assertThat(store.findUserByEmailAndPwd(email, "1356"), is(Optional.empty()));
+    }
 }
