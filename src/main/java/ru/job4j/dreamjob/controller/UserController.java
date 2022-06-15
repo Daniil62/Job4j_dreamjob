@@ -30,12 +30,15 @@ public class UserController {
     }
 
     @PostMapping("/registration")
-    public String registration(@ModelAttribute User user, Model model) {
+    public String registration(@ModelAttribute User user, Model model, HttpServletRequest req) {
         Optional<User> regUser = service.add(user);
         String result = "redirect:/result";
         if (regUser.isEmpty()) {
             model.addAttribute("error", true);
             result = "registration";
+        } else {
+            HttpSession session = req.getSession();
+            session.setAttribute("user", regUser.get());
         }
         return result;
     }
